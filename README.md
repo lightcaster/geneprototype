@@ -9,6 +9,7 @@ Be informed it's just a draft.
 * pandas
 * theano
 * kearas
+* sklearn
 * xlrd
 
 ## Running

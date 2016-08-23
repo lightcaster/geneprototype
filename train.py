@@ -5,6 +5,7 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dense, Embedding, Flatten
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
+from sklearn.metrics import average_precision_score, precision_recall_curve
 
 from timeit import default_timer as timer
 
@@ -104,12 +105,16 @@ def train(model, x, y):
 
     x_test_pad = pad_sequences(x_test, dtype=np.int8)
     stats = model.evaluate(x_test_pad, y_test)
+    y_pred = model.predict_proba(x_test_pad).flatten()
 
     print 'Test loss:', stats[0]
     print 'Test accuracy:', stats[1]
+    print 'Average Precision:', average_precision_score(y_test, y_pred)
 
-    y_pred = model.predict_proba(x_test_pad).flatten()
-    # todo: estimate ROC/AUC score
+    prec, rec, _ = precision_recall_curve(y_test, y_pred)
+
+    # you can plot prec/rec to draw PR curve
+
         
 if __name__ == '__main__':
     x, y = read_data('data.xlsx')
